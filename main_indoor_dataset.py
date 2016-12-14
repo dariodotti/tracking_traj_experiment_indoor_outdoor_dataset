@@ -15,8 +15,6 @@ import AutoEncoder as my_ae
 def main():
 
 
-
-
     with open('C:/Users/dario.dotti/Documents/tracking_points/tracking_data_kinect2/matrix_precomputed/exp_june/cahot_tr_23_5_20_4_20_5.txt', 'rU') as handle:
         SPEED_training_matrix = pickle.load(handle)
 

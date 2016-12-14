@@ -2,6 +2,8 @@ import cv2
 import pickle
 import numpy as np
 from multiprocessing.dummy import Pool as ThreadPool
+from os import listdir
+from os.path import isfile, join
 
 import img_proc as my_img_proc
 import main as main_camera017
@@ -78,12 +80,24 @@ def main():
     scene = cv2.imread('C:/Users/dario.dotti/Documents/LOST_dataset/camera017.jpg')
     list_poly = my_img_proc.divide_image(scene)
 
+    mypath= 'C:/Users/dario.dotti/Documents/LOST_dataset/8_2013-12_2012_camera001/pedestrian_cars/training/blobs/'
+    only_files=[f for f in listdir(mypath) if isfile(join(mypath, f))]
 
-    # slices=read_data_tracklets('C:/Users/dario.dotti/Documents/LOST_dataset/8_2013-12_2012_camera001/single_files/blobs_16_1.txt',0)
-    # with open('C:/Users/dario.dotti/Documents/LOST_dataset/8_2013-12_2012_camera001/pedestrian_cars/classification/blobs_org_by_frames_16_1.txt', 'wb') as handle:
-    #     pickle.dump(slices,handle)
-    # return False
-    #
+    for f in only_files:
+        day = f.split('_')[0]
+        month = f.split('_')[1]
+        my_file= ''.join([mypath,f])
+
+        slices=read_data_tracklets(my_file,0)
+        with open('C:/Users/dario.dotti/Documents/LOST_dataset/8_2013-12_2012_camera001/pedestrian_cars/training/blobs_forTraining/blobs_org_by_frames_'+day+'_'+month+'.txt', 'wb') as handle:
+            pickle.dump(slices,handle)
+
+    return False
+
+
+
+
+
     with open('C:/Users/dario.dotti/Documents/LOST_dataset/22_9_2014-1_10_2013_camera017/pedestrian_cars/classification/blobs_org_by_frames_7_2.txt', 'rb') as handle:
         slices = pickle.load(handle)
 

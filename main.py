@@ -230,13 +230,13 @@ def histograms_of_oriented_trajectories(list_poly,slices):
                 if len(tracklet)>0:
 
                     #for tracklet in patch compute HOT following paper
-                    hot_single_poly = my_img_proc.histogram_oriented_tracklets(tracklet)
+                    #hot_single_poly = my_img_proc.histogram_oriented_tracklets(tracklet)
 
                     #compute hot+curvature
-                    #hot_single_poly = my_img_proc.histogram_oriented_tracklets_plus_curvature(tracklet)
+                    hot_single_poly = my_img_proc.histogram_oriented_tracklets_plus_curvature(tracklet)
 
                 else:
-                    hot_single_poly = np.zeros((24))
+                    hot_single_poly = np.zeros((56))
 
                 ##add to general matrix
                 if len(hot_matrix)>0:
@@ -285,13 +285,8 @@ def velo_acc_curva_feature(list_poly,slices):
             for tracklet in [tracklets_in_cube]:
                 if len(tracklet)>0:
 
-                    if p == 2:
-                        need_correction=True
-                    else:
-                        need_correction=False
-
                     #for tracklet in Cube compute the new feature speed(velocity,Acceleration,curvature)
-                    speed_single_poly = my_img_proc.get_velocity_curvature_acceleration(tracklet,need_correction)
+                    speed_single_poly = my_img_proc.get_velocity_curvature_acceleration(tracklet)
 
                 else:
 
@@ -450,8 +445,8 @@ def main():
     #normalized_RBH= trajectories_in_interval(scene, list_poly, slices)
 
     ##2b)Feature Extraction METHOD: compute histogram of Oriented Tracklets for all the tracklets in every patch
-    #normalized_data_HOT,orig_list_id = histograms_of_oriented_trajectories(list_poly,slices)
-
+    normalized_data_HOT,orig_list_id = histograms_of_oriented_trajectories(list_poly,slices)
+    save_matrix_pickle(normalized_data_HOT,'C:/Users/dario.dotti/Documents/LOST_dataset/22_9_2014-1_10_2013_camera017/pedestrian_cars/HOT_matrix.txt')
     # ##2ba)SAVE HOT data
     # with open('C:/Users/dario.dotti/Documents/LOST_dataset/22_9_2014-1_10_2013_camera017/AE_parameters/30000id/30000_data_HOT.gz', 'wb') as handle:
     #     cpickle.dump(normalized_data_HOT,handle,protocol=2)
@@ -465,13 +460,15 @@ def main():
     # print 'HOT faetures extracted'
 
     ##2c)Feature Extraction METHOD: Compute the features velocity-acceleration-curvature to distinguish between pedestrian and cars
-    #normalized_data_SPEED = velo_acc_curva_feature(list_poly,slices)
-
+    normalized_data_SPEED = velo_acc_curva_feature(list_poly,slices)
+    save_matrix_pickle(normalized_data_SPEED,'C:/Users/dario.dotti/Documents/LOST_dataset/22_9_2014-1_10_2013_camera017/pedestrian_cars/SPEED_matrix.txt')
 
 
 ##--------------------------------------------------------------------------------------------------------------------##
 ####Experinment PEDESTRIAN VS CARS ABNORMAL DETECTION
-    #pedestrian_cluster,cars_cluster = my_exp.cars_vs_pedestrian(normalized_data_SPEED,slices,scene)
+
+    ##Clustering
+    pedestrian_cluster,cars_cluster = my_exp.cars_vs_pedestrian(normalized_data_SPEED,slices,scene)
 
     pedestrian_cluster=load_matrix_pickle('C:/Users/dario.dotti/Documents/LOST_dataset/22_9_2014-1_10_2013_camera017/pedestrian_cluster.txt')
 

@@ -142,7 +142,7 @@ def histogram_oriented_tracklets(cube):
     return hot_matrix.reshape((len(orientation_intervals)*len(magnitude_intervals)))
 
 
-def get_velocity_curvature_acceleration(cube,need_correction):
+def get_velocity_curvature_acceleration(cube):
 
     step = 2
     if len(cube) > step:
@@ -159,12 +159,8 @@ def get_velocity_curvature_acceleration(cube,need_correction):
             velocity_array = np.zeros((len(cube)-step))
 
             for i in xrange(0,len(cube)-step):
-                if need_correction:
-                    dx =abs(float(cube[i+step,0]) - float(cube[i,0]))*2
-                    dy = abs(float(cube[i+step,1]) - float(cube[i,1]))*2
-                else:
-                    dx =abs(float(cube[i+step,0]) - float(cube[i,0]))
-                    dy = abs(float(cube[i+step,1]) - float(cube[i,1]))
+                dx =abs(float(cube[i+step,0]) - float(cube[i,0]))
+                dy = abs(float(cube[i+step,1]) - float(cube[i,1]))
 
                 magn = np.sqrt((np.power(dx,2)+np.power(dy,2)))
 
